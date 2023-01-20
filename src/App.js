@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import Cart from './pages/Cart';
 import MainPage from './pages/MainPage';
@@ -8,7 +8,7 @@ import ProductDetails from './pages/ProductDetails';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Switch>
       <Route
         exact
         path="/"
@@ -24,7 +24,7 @@ function App() {
         path="/product-details/:id"
         render={ (props) => <ProductDetails { ...props } /> }
       />
-    </BrowserRouter>
+    </Switch>
 
   );
 }
