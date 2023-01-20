@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import { addCart } from '../services/addToCart';
 
-import ProductCard from './ProductCard';
+import ProductCard from '../components/ProductCard';
 
 class MainPage extends React.Component {
   constructor(props) {
