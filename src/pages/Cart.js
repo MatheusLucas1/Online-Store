@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { getCartProducts, removeProduct } from '../services/addToCart';
 
 class Cart extends React.Component {
@@ -6,10 +7,10 @@ class Cart extends React.Component {
     super(props);
     this.state = {
       cartProducts: [],
-      clicks: 1,
     };
     this.increaseQuantity = this.increaseQuantity.bind(this);
     this.decreaseQuantity = this.decreaseQuantity.bind(this);
+    this.productRemove = this.productRemove.bind(this);
   }
 
   componentDidMount() {
@@ -19,27 +20,38 @@ class Cart extends React.Component {
     });
   }
 
-  increaseQuantity() {
-    const { clicks, cartProducts } = this.state;
-    this.setState({
-      clicks: clicks + 1,
-    });
-  }
-
-  decreaseQuantity() {
-    const { clicks, cartProducts } = this.state;
-    this.setState({
-      clicks: clicks - 1,
-    });
-  }
-
-  productRemove() {
+  productRemove({ target }) {
+    const { value } = target;
     const { cartProducts } = this.state;
-    console.log(cartProducts);
+    const productToRemove = cartProducts.filter((product) => (
+      product.productId === value));
+    const onlyObject = productToRemove.pop();
+    removeProduct(onlyObject);
+    console.log(value);
+  }
+
+  increaseQuantity({ target }) {
+    const { value } = target;
+    const { cartProducts } = this.state;
+    const findProduct = cartProducts.find((prod) => prod.productId === value);
+    findProduct.quantity += 1;
+    this.setState({
+      cartProducts,
+    });
+  }
+
+  decreaseQuantity({ target }) {
+    const { value } = target;
+    const { cartProducts } = this.state;
+    const findProduct = cartProducts.find((prod) => prod.productId === value);
+    findProduct.quantity -= 1;
+    this.setState({
+      cartProducts,
+    });
   }
 
   render() {
-    const { clicks, cartProducts } = this.state;
+    const { cartProducts } = this.state;
     return (
       <div>
         {cartProducts.length === 0 ? (
@@ -48,17 +60,21 @@ class Cart extends React.Component {
           </h3>)
           : (
             <div>
-              {cartProducts.map(({ name, quantity, image }, index) => (
+              {cartProducts.map(({ name, quantity, image, productId }, index) => (
                 <div key={ index }>
-                  <img src={ image } alt={ name } />
+                  <img src={ image } alt={ productId } />
                   <p data-testid="shopping-cart-product-name">{name}</p>
                   <p
                     data-testid="shopping-cart-product-quantity"
                   >
                     {`Quantidade: ${quantity}`}
                   </p>
+                  <p>
+                    {`id: ${productId}`}
+                  </p>
                   <button
                     type="button"
+                    value={ productId }
                     data-testid="product-increase-quantity"
                     onClick={ this.increaseQuantity }
                   >
@@ -66,14 +82,15 @@ class Cart extends React.Component {
                   </button>
                   <button
                     type="button"
+                    value={ productId }
                     data-testid="product-decrease-quantity"
                     onClick={ this.decreaseQuantity }
                   >
                     -
                   </button>
-                  <p>{clicks}</p>
                   <button
                     type="button"
+                    value={ productId }
                     data-testid="remove-product"
                     onClick={ this.productRemove }
                   >
@@ -87,5 +104,16 @@ class Cart extends React.Component {
     );
   }
 }
+
+Cart.propTypes = {
+  location: PropTypes.shape({
+    state: PropTypes.shape({
+      id: PropTypes.string,
+      price: PropTypes.number,
+      thumbnail: PropTypes.string,
+      title: PropTypes.string,
+    }),
+  }).isRequired,
+};
 
 export default Cart;

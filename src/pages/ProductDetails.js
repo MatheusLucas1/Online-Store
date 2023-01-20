@@ -22,7 +22,6 @@ class ProductDetails extends React.Component {
 
   addToCart = async () => {
     const { details } = this.state;
-    // const cartProductFound = details.find((product) => product.id === productId);
     console.log(details);
     addCart(details);
   };
@@ -30,7 +29,7 @@ class ProductDetails extends React.Component {
   render() {
     const { details } = this.state;
     return (
-      <div>
+      <div key={ details.id }>
         <h1
           data-testid="product-detail-name"
         >
