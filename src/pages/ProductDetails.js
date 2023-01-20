@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getProductById } from '../services/api';
 // import { getCartProducts } from '../services/addToCart';
+import { addCart } from '../services/addToCart';
 
 class ProductDetails extends React.Component {
   state = {
@@ -18,6 +19,13 @@ class ProductDetails extends React.Component {
       details,
     });
   }
+
+  addToCart = async () => {
+    const { details } = this.state;
+    // const cartProductFound = details.find((product) => product.id === productId);
+    console.log(details);
+    addCart(details);
+  };
 
   render() {
     const { details } = this.state;
@@ -45,9 +53,16 @@ class ProductDetails extends React.Component {
             type="button"
             data-testid="shopping-cart-button"
           >
-            Voltar ao carrinho
+            Ver carrinho
           </button>
         </Link>
+        <button
+          type="button"
+          data-testid="product-detail-add-to-cart"
+          onClick={ this.addToCart }
+        >
+          Adicionar ao Carrinho
+        </button>
 
       </div>
     );

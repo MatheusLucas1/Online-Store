@@ -56,7 +56,7 @@ class MainPage extends React.Component {
     });
   }
 
-  addToCart = async (e, productId) => {
+  addToCart = async (productId) => {
     const { fetchResult } = this.state;
     const cartProductFound = fetchResult.find((product) => product.id === productId);
     addCart(cartProductFound);
