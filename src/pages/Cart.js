@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getCartProducts, removeProduct } from '../services/addToCart';
+import { getCartProducts,
+  removeProduct, saveProducts } from '../services/addToCart';
 
 class Cart extends React.Component {
   constructor(props) {
@@ -38,16 +39,21 @@ class Cart extends React.Component {
     this.setState({
       cartProducts,
     });
+    saveProducts(cartProducts);
   }
 
   decreaseQuantity({ target }) {
     const { value } = target;
     const { cartProducts } = this.state;
     const findProduct = cartProducts.find((prod) => prod.productId === value);
-    findProduct.quantity -= 1;
+    if (findProduct.quantity > 1) {
+      findProduct.quantity -= 1;
+    }
     this.setState({
       cartProducts,
     });
+    saveProducts(cartProducts);
+    console.log(cartProducts);
   }
 
   render() {
