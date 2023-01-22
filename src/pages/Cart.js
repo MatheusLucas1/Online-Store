@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getCartProducts,
-  removeProduct, saveProducts } from '../services/addToCart';
+import { getCartProducts, saveProducts } from '../services/addToCart';
 
 class Cart extends React.Component {
   constructor(props) {
@@ -21,14 +20,21 @@ class Cart extends React.Component {
     });
   }
 
-  productRemove({ target }) {
-    const { value } = target;
+  getProduct = () => {
+    const products = getCartProducts();
+    console.log(products);
+    this.setState({
+      cartProducts: products || [],
+    });
+  };
+
+  productRemove(name) {
     const { cartProducts } = this.state;
-    const productToRemove = cartProducts.filter((product) => (
-      product.productId === value));
-    const onlyObject = productToRemove.pop();
-    removeProduct(onlyObject);
-    console.log(value);
+    console.log(cartProducts);
+    const filter = cartProducts.filter((product) => product.name !== name);
+    console.log(filter);
+    saveProducts(filter);
+    this.getProduct();
   }
 
   increaseQuantity({ target }) {
@@ -53,7 +59,6 @@ class Cart extends React.Component {
       cartProducts,
     });
     saveProducts(cartProducts);
-    console.log(cartProducts);
   }
 
   render() {
@@ -96,9 +101,10 @@ class Cart extends React.Component {
                   </button>
                   <button
                     type="button"
+                    name={ name }
                     value={ productId }
                     data-testid="remove-product"
-                    onClick={ this.productRemove }
+                    onClick={ () => this.productRemove(name) }
                   >
                     Remove
                   </button>
