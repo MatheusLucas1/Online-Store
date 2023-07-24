@@ -49,5 +49,6 @@ ProductCard.propTypes = {
   }).isRequired,
   addToCart: PropTypes.func.isRequired,
 };
+// ointment
 
 export default ProductCard;
